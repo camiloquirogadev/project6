@@ -1,0 +1,568 @@
+import { useState } from 'react';
+import Card from '../components/ui/Card';
+import { useAuth } from '../context/AuthContext';
+import { Save, User, Building, CreditCard, Bell, Shield, HelpCircle } from 'lucide-react';
+
+function Settings() {
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState('profile');
+  
+  // Tabs configuration
+  const tabs = [
+    { id: 'profile', label: 'Profile', icon: <User size={18} /> },
+    { id: 'company', label: 'Company', icon: <Building size={18} /> },
+    { id: 'billing', label: 'Billing', icon: <CreditCard size={18} /> },
+    { id: 'notifications', label: 'Notifications', icon: <Bell size={18} /> },
+    { id: 'security', label: 'Security', icon: <Shield size={18} /> },
+    { id: 'help', label: 'Help & Support', icon: <HelpCircle size={18} /> },
+  ];
+  
+  // Render tab content based on active tab
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'profile':
+        return <ProfileSettings user={user} />;
+      case 'company':
+        return <CompanySettings />;
+      case 'billing':
+        return <BillingSettings />;
+      case 'notifications':
+        return <NotificationSettings />;
+      case 'security':
+        return <SecuritySettings />;
+      case 'help':
+        return <HelpSettings />;
+      default:
+        return null;
+    }
+  };
+  
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <Card>
+            <nav className="space-y-1">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md w-full ${
+                    activeTab === tab.id
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  <span className="mr-3">{tab.icon}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </Card>
+        </div>
+        
+        {/* Content */}
+        <div className="lg:col-span-3">
+          {renderTabContent()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Profile Settings Component
+function ProfileSettings({ user }: { user: any }) {
+  return (
+    <Card title="Profile Settings">
+      <div className="space-y-6">
+        <div className="flex items-center">
+          <div className="mr-4">
+            <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
+              <span className="text-lg font-medium text-blue-600">
+                {user?.name.split(' ').map((n: string) => n[0]).join('').toUpperCase()}
+              </span>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-base font-medium text-gray-900">{user?.name}</h3>
+            <p className="text-sm text-gray-500">{user?.email}</p>
+            <button className="mt-1 text-sm text-blue-600 hover:text-blue-800">
+              Change avatar
+            </button>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-200 pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                className="mt-1 input"
+                defaultValue={user?.name.split(' ')[0]}
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                className="mt-1 input"
+                defaultValue={user?.name.split(' ')[1] || ''}
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="mt-1 input"
+                defaultValue={user?.email}
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                className="mt-1 input"
+                placeholder="+1 (555) 123-4567"
+              />
+            </div>
+          </div>
+          
+          <div className="mt-6">
+            <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
+              Bio
+            </label>
+            <textarea
+              id="bio"
+              rows={4}
+              className="mt-1 input"
+              placeholder="Tell us about yourself"
+            ></textarea>
+          </div>
+          
+          <div className="mt-6 flex justify-end">
+            <button className="btn btn-primary flex items-center">
+              <Save size={16} className="mr-1" />
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+// Company Settings Component
+function CompanySettings() {
+  return (
+    <Card title="Company Information">
+      <div className="space-y-6">
+        <div className="flex items-center">
+          <div className="mr-4">
+            <div className="h-16 w-16 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center">
+              <Building size={24} className="text-gray-500" />
+            </div>
+          </div>
+          <div>
+            <button className="text-sm text-blue-600 hover:text-blue-800">
+              Upload logo
+            </button>
+            <p className="text-xs text-gray-500 mt-1">
+              Recommended: 400x400px, max 1MB
+            </p>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-200 pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+                Company Name
+              </label>
+              <input
+                type="text"
+                id="companyName"
+                className="mt-1 input"
+                defaultValue="Your Company Name"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="taxId" className="block text-sm font-medium text-gray-700">
+                Tax ID / VAT Number
+              </label>
+              <input
+                type="text"
+                id="taxId"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="website" className="block text-sm font-medium text-gray-700">
+                Website
+              </label>
+              <input
+                type="url"
+                id="website"
+                className="mt-1 input"
+                placeholder="https://example.com"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="industry" className="block text-sm font-medium text-gray-700">
+                Industry
+              </label>
+              <select id="industry" className="mt-1 input">
+                <option>Technology</option>
+                <option>Retail</option>
+                <option>Manufacturing</option>
+                <option>Services</option>
+                <option>Healthcare</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          
+          <h3 className="font-medium text-gray-900 mt-6 mb-3">Address</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label htmlFor="street" className="block text-sm font-medium text-gray-700">
+                Street Address
+              </label>
+              <input
+                type="text"
+                id="street"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                City
+              </label>
+              <input
+                type="text"
+                id="city"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                State / Province
+              </label>
+              <input
+                type="text"
+                id="state"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
+                Zip / Postal Code
+              </label>
+              <input
+                type="text"
+                id="zipCode"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                Country
+              </label>
+              <select id="country" className="mt-1 input">
+                <option>United States</option>
+                <option>Canada</option>
+                <option>United Kingdom</option>
+                <option>Australia</option>
+                <option>Germany</option>
+                <option>France</option>
+                <option>Spain</option>
+              </select>
+            </div>
+          </div>
+          
+          <div className="mt-6 flex justify-end">
+            <button className="btn btn-primary flex items-center">
+              <Save size={16} className="mr-1" />
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+// Billing Settings Component (simplified for demo)
+function BillingSettings() {
+  return (
+    <Card title="Billing & Subscription">
+      <div className="space-y-6">
+        <div className="bg-blue-50 p-4 rounded-md">
+          <h3 className="text-sm font-medium text-blue-800">Current Plan: Professional</h3>
+          <p className="text-sm text-blue-600 mt-1">Your subscription renews on Dec 31, 2025</p>
+        </div>
+        
+        <div className="border-t border-gray-200 pt-6">
+          <h3 className="font-medium text-gray-900 mb-3">Payment Method</h3>
+          
+          <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-4 flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="p-2 bg-white rounded-md mr-3 border border-gray-200">
+                <CreditCard size={20} className="text-gray-500" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Visa ending in 4242</p>
+                <p className="text-xs text-gray-500">Expires 12/25</p>
+              </div>
+            </div>
+            <button className="text-sm text-blue-600 hover:text-blue-800">
+              Edit
+            </button>
+          </div>
+          
+          <button className="text-sm text-blue-600 hover:text-blue-800">
+            + Add new payment method
+          </button>
+          
+          <h3 className="font-medium text-gray-900 mt-6 mb-3">Billing Address</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label htmlFor="billingName" className="block text-sm font-medium text-gray-700">
+                Name on Card
+              </label>
+              <input
+                type="text"
+                id="billingName"
+                className="mt-1 input"
+                defaultValue="John Doe"
+              />
+            </div>
+            
+            <div className="md:col-span-2">
+              <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700">
+                Billing Address
+              </label>
+              <input
+                type="text"
+                id="billingAddress"
+                className="mt-1 input"
+              />
+            </div>
+          </div>
+          
+          <div className="mt-6 flex justify-end">
+            <button className="btn btn-primary flex items-center">
+              <Save size={16} className="mr-1" />
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+// Other settings components are simplified
+function NotificationSettings() {
+  return (
+    <Card title="Notification Preferences">
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-gray-900">Email Notifications</h3>
+              <p className="text-xs text-gray-500">Receive email notifications for important events</p>
+            </div>
+            <div className="relative inline-block w-10 mr-2 align-middle select-none">
+              <input type="checkbox" id="emailNotifications" defaultChecked className="sr-only" />
+              <label htmlFor="emailNotifications" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-gray-900">Invoice Alerts</h3>
+              <p className="text-xs text-gray-500">Get notified when invoices are created or paid</p>
+            </div>
+            <div className="relative inline-block w-10 mr-2 align-middle select-none">
+              <input type="checkbox" id="invoiceAlerts" defaultChecked className="sr-only" />
+              <label htmlFor="invoiceAlerts" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-gray-900">Marketing Communications</h3>
+              <p className="text-xs text-gray-500">Receive updates about new features and offers</p>
+            </div>
+            <div className="relative inline-block w-10 mr-2 align-middle select-none">
+              <input type="checkbox" id="marketingComms" className="sr-only" />
+              <label htmlFor="marketingComms" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+            </div>
+          </div>
+        </div>
+        
+        <div className="mt-6 flex justify-end">
+          <button className="btn btn-primary flex items-center">
+            <Save size={16} className="mr-1" />
+            Save Preferences
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function SecuritySettings() {
+  return (
+    <Card title="Security Settings">
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-base font-medium text-gray-900 mb-3">Change Password</h3>
+          
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
+                Current Password
+              </label>
+              <input
+                type="password"
+                id="currentPassword"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+                New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                className="mt-1 input"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Confirm New Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className="mt-1 input"
+              />
+            </div>
+          </div>
+          
+          <div className="mt-4">
+            <button className="btn btn-primary">
+              Update Password
+            </button>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-200 pt-6">
+          <h3 className="text-base font-medium text-gray-900 mb-3">Two-Factor Authentication</h3>
+          
+          <p className="text-sm text-gray-500 mb-4">
+            Add an extra layer of security to your account by enabling two-factor authentication.
+          </p>
+          
+          <button className="btn btn-secondary">
+            Enable Two-Factor Authentication
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function HelpSettings() {
+  return (
+    <Card title="Help & Support">
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-base font-medium text-gray-900 mb-3">Documentation</h3>
+          
+          <p className="text-sm text-gray-500 mb-4">
+            Check our comprehensive documentation for guides and tutorials on using the platform.
+          </p>
+          
+          <button className="btn btn-secondary">
+            View Documentation
+          </button>
+        </div>
+        
+        <div className="border-t border-gray-200 pt-6">
+          <h3 className="text-base font-medium text-gray-900 mb-3">Contact Support</h3>
+          
+          <p className="text-sm text-gray-500 mb-4">
+            Need help? Our support team is here to assist you.
+          </p>
+          
+          <div>
+            <label htmlFor="supportSubject" className="block text-sm font-medium text-gray-700">
+              Subject
+            </label>
+            <input
+              type="text"
+              id="supportSubject"
+              className="mt-1 input"
+              placeholder="What do you need help with?"
+            />
+          </div>
+          
+          <div className="mt-4">
+            <label htmlFor="supportMessage" className="block text-sm font-medium text-gray-700">
+              Message
+            </label>
+            <textarea
+              id="supportMessage"
+              rows={4}
+              className="mt-1 input"
+              placeholder="Describe your issue in detail"
+            ></textarea>
+          </div>
+          
+          <div className="mt-4">
+            <button className="btn btn-primary">
+              Send Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+export default Settings;

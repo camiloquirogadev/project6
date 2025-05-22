@@ -2,11 +2,13 @@ import { useState } from 'react';
 import Card from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
 import { Save, User, Building, CreditCard, Bell, Shield, HelpCircle } from 'lucide-react';
+import { AddPaymentModal } from '../components/modals/AddPaymentModal';
 
 function Settings() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('profile');
-  
+  const [isAddPaymentOpen, setAddPaymentOpen] = useState(false);
+
   // Tabs configuration
   const tabs = [
     { id: 'profile', label: 'Profile', icon: <User size={18} /> },
@@ -16,7 +18,7 @@ function Settings() {
     { id: 'security', label: 'Security', icon: <Shield size={18} /> },
     { id: 'help', label: 'Help & Support', icon: <HelpCircle size={18} /> },
   ];
-  
+
   // Render tab content based on active tab
   const renderTabContent = () => {
     switch (activeTab) {
@@ -25,7 +27,9 @@ function Settings() {
       case 'company':
         return <CompanySettings />;
       case 'billing':
-        return <BillingSettings />;
+        return (
+          <BillingSettings onAddPayment={() => setAddPaymentOpen(true)} />
+        );
       case 'notifications':
         return <NotificationSettings />;
       case 'security':
@@ -36,13 +40,13 @@ function Settings() {
         return null;
     }
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Sidebar */}
         <div className="lg:col-span-1">
@@ -52,11 +56,10 @@ function Settings() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md w-full ${
-                    activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  }`}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-md w-full ${activeTab === tab.id
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
                 >
                   <span className="mr-3">{tab.icon}</span>
                   {tab.label}
@@ -65,7 +68,19 @@ function Settings() {
             </nav>
           </Card>
         </div>
-        
+        {/* Add Payment Method Modal */}
+        {isAddPaymentOpen && (
+          <AddPaymentModal
+            onClose={() => setAddPaymentOpen(false)}
+            onSave={(newMethod: any) => {
+              console.log('New payment method:', newMethod);
+              setAddPaymentOpen(false);
+              // TODO: integrate API call to save payment method
+            }}
+          />
+        )}
+        {/* Main Content */}
+
         {/* Content */}
         <div className="lg:col-span-3">
           {renderTabContent()}
@@ -96,7 +111,7 @@ function ProfileSettings({ user }: { user: any }) {
             </button>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-200 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -110,7 +125,7 @@ function ProfileSettings({ user }: { user: any }) {
                 defaultValue={user?.name.split(' ')[0]}
               />
             </div>
-            
+
             <div>
               <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
                 Last Name
@@ -122,7 +137,7 @@ function ProfileSettings({ user }: { user: any }) {
                 defaultValue={user?.name.split(' ')[1] || ''}
               />
             </div>
-            
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
@@ -134,7 +149,7 @@ function ProfileSettings({ user }: { user: any }) {
                 defaultValue={user?.email}
               />
             </div>
-            
+
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
                 Phone Number
@@ -147,7 +162,7 @@ function ProfileSettings({ user }: { user: any }) {
               />
             </div>
           </div>
-          
+
           <div className="mt-6">
             <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
               Bio
@@ -159,7 +174,7 @@ function ProfileSettings({ user }: { user: any }) {
               placeholder="Tell us about yourself"
             ></textarea>
           </div>
-          
+
           <div className="mt-6 flex justify-end">
             <button className="btn btn-primary flex items-center">
               <Save size={16} className="mr-1" />
@@ -192,7 +207,7 @@ function CompanySettings() {
             </p>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-200 pt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -206,7 +221,7 @@ function CompanySettings() {
                 defaultValue="Your Company Name"
               />
             </div>
-            
+
             <div>
               <label htmlFor="taxId" className="block text-sm font-medium text-gray-700">
                 Tax ID / VAT Number
@@ -217,7 +232,7 @@ function CompanySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="website" className="block text-sm font-medium text-gray-700">
                 Website
@@ -229,7 +244,7 @@ function CompanySettings() {
                 placeholder="https://example.com"
               />
             </div>
-            
+
             <div>
               <label htmlFor="industry" className="block text-sm font-medium text-gray-700">
                 Industry
@@ -244,9 +259,9 @@ function CompanySettings() {
               </select>
             </div>
           </div>
-          
+
           <h3 className="font-medium text-gray-900 mt-6 mb-3">Address</h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <label htmlFor="street" className="block text-sm font-medium text-gray-700">
@@ -258,7 +273,7 @@ function CompanySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="city" className="block text-sm font-medium text-gray-700">
                 City
@@ -269,7 +284,7 @@ function CompanySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="state" className="block text-sm font-medium text-gray-700">
                 State / Province
@@ -280,7 +295,7 @@ function CompanySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700">
                 Zip / Postal Code
@@ -291,7 +306,7 @@ function CompanySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="country" className="block text-sm font-medium text-gray-700">
                 Country
@@ -307,7 +322,7 @@ function CompanySettings() {
               </select>
             </div>
           </div>
-          
+
           <div className="mt-6 flex justify-end">
             <button className="btn btn-primary flex items-center">
               <Save size={16} className="mr-1" />
@@ -320,19 +335,21 @@ function CompanySettings() {
   );
 }
 
-// Billing Settings Component (simplified for demo)
-function BillingSettings() {
+// Billing Settings Component
+function BillingSettings({ onAddPayment }: { onAddPayment: () => void }) {
   return (
     <Card title="Billing & Subscription">
       <div className="space-y-6">
+        {/* Current plan info */}
         <div className="bg-blue-50 p-4 rounded-md">
           <h3 className="text-sm font-medium text-blue-800">Current Plan: Professional</h3>
           <p className="text-sm text-blue-600 mt-1">Your subscription renews on Dec 31, 2025</p>
         </div>
-        
+
         <div className="border-t border-gray-200 pt-6">
           <h3 className="font-medium text-gray-900 mb-3">Payment Method</h3>
-          
+
+          {/* Existing payment method display */}
           <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-4 flex items-center justify-between">
             <div className="flex items-center">
               <div className="p-2 bg-white rounded-md mr-3 border border-gray-200">
@@ -347,44 +364,16 @@ function BillingSettings() {
               Edit
             </button>
           </div>
-          
-          <button className="text-sm text-blue-600 hover:text-blue-800">
+
+          {/* Add new payment method button */}
+          <button
+            className="text-sm text-blue-600 hover:text-blue-800"
+            onClick={onAddPayment}
+          >
             + Add new payment method
           </button>
-          
-          <h3 className="font-medium text-gray-900 mt-6 mb-3">Billing Address</h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <label htmlFor="billingName" className="block text-sm font-medium text-gray-700">
-                Name on Card
-              </label>
-              <input
-                type="text"
-                id="billingName"
-                className="mt-1 input"
-                defaultValue="John Doe"
-              />
-            </div>
-            
-            <div className="md:col-span-2">
-              <label htmlFor="billingAddress" className="block text-sm font-medium text-gray-700">
-                Billing Address
-              </label>
-              <input
-                type="text"
-                id="billingAddress"
-                className="mt-1 input"
-              />
-            </div>
-          </div>
-          
-          <div className="mt-6 flex justify-end">
-            <button className="btn btn-primary flex items-center">
-              <Save size={16} className="mr-1" />
-              Save Changes
-            </button>
-          </div>
+
+          {/* Billing address form fields can go here */}
         </div>
       </div>
     </Card>
@@ -407,7 +396,7 @@ function NotificationSettings() {
               <label htmlFor="emailNotifications" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-medium text-gray-900">Invoice Alerts</h3>
@@ -418,7 +407,7 @@ function NotificationSettings() {
               <label htmlFor="invoiceAlerts" className="block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-medium text-gray-900">Marketing Communications</h3>
@@ -430,7 +419,7 @@ function NotificationSettings() {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-6 flex justify-end">
           <button className="btn btn-primary flex items-center">
             <Save size={16} className="mr-1" />
@@ -448,7 +437,7 @@ function SecuritySettings() {
       <div className="space-y-6">
         <div>
           <h3 className="text-base font-medium text-gray-900 mb-3">Change Password</h3>
-          
+
           <div className="space-y-4">
             <div>
               <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700">
@@ -460,7 +449,7 @@ function SecuritySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
                 New Password
@@ -471,7 +460,7 @@ function SecuritySettings() {
                 className="mt-1 input"
               />
             </div>
-            
+
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm New Password
@@ -483,21 +472,21 @@ function SecuritySettings() {
               />
             </div>
           </div>
-          
+
           <div className="mt-4">
             <button className="btn btn-primary">
               Update Password
             </button>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-200 pt-6">
           <h3 className="text-base font-medium text-gray-900 mb-3">Two-Factor Authentication</h3>
-          
+
           <p className="text-sm text-gray-500 mb-4">
             Add an extra layer of security to your account by enabling two-factor authentication.
           </p>
-          
+
           <button className="btn btn-secondary">
             Enable Two-Factor Authentication
           </button>
@@ -513,23 +502,23 @@ function HelpSettings() {
       <div className="space-y-6">
         <div>
           <h3 className="text-base font-medium text-gray-900 mb-3">Documentation</h3>
-          
+
           <p className="text-sm text-gray-500 mb-4">
             Check our comprehensive documentation for guides and tutorials on using the platform.
           </p>
-          
+
           <button className="btn btn-secondary">
             View Documentation
           </button>
         </div>
-        
+
         <div className="border-t border-gray-200 pt-6">
           <h3 className="text-base font-medium text-gray-900 mb-3">Contact Support</h3>
-          
+
           <p className="text-sm text-gray-500 mb-4">
             Need help? Our support team is here to assist you.
           </p>
-          
+
           <div>
             <label htmlFor="supportSubject" className="block text-sm font-medium text-gray-700">
               Subject
@@ -541,7 +530,7 @@ function HelpSettings() {
               placeholder="What do you need help with?"
             />
           </div>
-          
+
           <div className="mt-4">
             <label htmlFor="supportMessage" className="block text-sm font-medium text-gray-700">
               Message
@@ -553,7 +542,7 @@ function HelpSettings() {
               placeholder="Describe your issue in detail"
             ></textarea>
           </div>
-          
+
           <div className="mt-4">
             <button className="btn btn-primary">
               Send Message

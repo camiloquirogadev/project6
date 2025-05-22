@@ -1,5 +1,5 @@
 {
-  "name": "holded-clone",
+  "name": "web-app",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -20,6 +20,8 @@
     "@eslint/js": "^9.9.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
     "eslint": "^9.9.1",

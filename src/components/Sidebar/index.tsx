@@ -26,10 +26,10 @@ function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProps) {
     { path: '/dashboard', label: 'Dashboard', icon: <Home size={20} /> },
     { path: '/invoices', label: 'Invoices', icon: <FileText size={20} /> },
     { path: '/contacts', label: 'Contacts', icon: <Users size={20} /> },
-    { path: '/products', label: 'Products', icon: <Package size={20} /> },
-    { path: '/sales', label: 'Sales', icon: <CreditCard size={20} /> },
-    { path: '/reports', label: 'Reports', icon: <BarChart2 size={20} /> },
-    { path: '/calendar', label: 'Calendar', icon: <Calendar size={20} /> },
+    // { path: '/products', label: 'Products', icon: <Package size={20} /> },
+    // { path: '/sales', label: 'Sales', icon: <CreditCard size={20} /> },
+    // { path: '/reports', label: 'Reports', icon: <BarChart2 size={20} /> },
+    // { path: '/calendar', label: 'Calendar', icon: <Calendar size={20} /> },
     { path: '/settings', label: 'Settings', icon: <SettingsIcon size={20} /> },
   ];
   

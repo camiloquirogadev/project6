@@ -1,0 +1,18 @@
+/* print.css */
+@media print {
+  /* Oculta todo el body... */
+  body * {
+    visibility: hidden;
+  }
+  /* ... excepto .print-area y sus hijos */
+  .print-area, .print-area * {
+    visibility: visible;
+  }
+  /* Asegúrate de posicionar .print-area al inicio */
+  .print-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

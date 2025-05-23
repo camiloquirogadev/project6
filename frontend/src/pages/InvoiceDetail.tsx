@@ -6,6 +6,7 @@ import StatusBadge from '../components/ui/StatusBadge';
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { checkAndMarkOverdue } from '../utils/overdueLogic';
 
 import {
   ChevronLeft,
@@ -31,25 +32,24 @@ export default function InvoiceDetail() {
   const [contact, setContact] = useState<any>(null);
   const pdfRef = useRef<HTMLDivElement>(null);
 
-
-  // Carga invoice y contacto
   useEffect(() => {
     if (!id) return;
 
-    const inv = invoices.find(i => i.id === id);
+    let inv = invoices.find(i => i.id === id);
     if (!inv) {
       navigate('/invoices');
       return;
     }
 
+    // Aplica lógica de vencimiento
+    inv = checkAndMarkOverdue(inv, updateInvoice);
     setInvoice(inv);
     setContact(contacts.find(c => c.id === inv.contactId) || null);
-  }, [id, invoices, contacts, navigate]);
-
+  }, [id, invoices, contacts, navigate, updateInvoice]);
   if (!invoice || !contact) {
     return (
       <div className="flex justify-center items-center h-64">
-        <p className="text-gray-500">Loading invoice details...</p>
+        <p className="text-gray-500">Cargando detalles de la factura…</p>
       </div>
     );
   }
@@ -62,7 +62,9 @@ export default function InvoiceDetail() {
 
   // Manejadores de botones
   //edit
+
   const handleEdit = () => navigate(`/invoices/${invoice.id}/edit`);
+
   //send
   const handleSend = () => {
     const updated = { ...invoice, status: 'sent' };
@@ -74,7 +76,10 @@ export default function InvoiceDetail() {
   //download
   const handleDownload = async () => {
     if (!pdfRef.current) return;
-    const canvas = await html2canvas(pdfRef.current, { scale: 2 });
+    const canvas = await html2canvas(pdfRef.current, {
+      scale: 2,
+      backgroundColor: '#fff',
+    });
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'pt', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -82,6 +87,7 @@ export default function InvoiceDetail() {
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     pdf.save(`${invoice.number}.pdf`);
   };
+
   //delete
   const handleDelete = () => {
     if (window.confirm('¿Delete this invoice? This action cannot be undone.')) {
@@ -108,7 +114,7 @@ export default function InvoiceDetail() {
 
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center">
@@ -150,11 +156,11 @@ export default function InvoiceDetail() {
 
       {/* Invoice Content */}
       <Card>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="invoice-print-area print:visible print:bg-white print:shadow-none" ref={pdfRef}>
           {/* Invoice Info */}
           <div className="lg:col-span-2 space-y-8">
             {/* Header Info */}
-            <div className="flex flex-col sm:flex-row justify-between">
+            <div ref={pdfRef} className="invoice-content" >
               <div>
                 <h2 className="text-xl font-bold text-blue-600 mb-1">Invoice</h2>
                 <p className="text-gray-600">{invoice.number}</p>
@@ -165,6 +171,12 @@ export default function InvoiceDetail() {
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">Due Date:</p>
                   <p className="text-sm font-medium">{new Date(invoice.dueDate).toLocaleDateString()}</p>
+                </div>
+                <div className="flex items-center mt-1">
+                  <StatusBadge status={invoice.status} />
+                  <span className="ml-2 text-sm text-gray-500">
+                    Created on {new Date(invoice.date).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
 
@@ -268,9 +280,9 @@ export default function InvoiceDetail() {
                 ) : (
                   <button
                     disabled
-                    className="w-full btn btn-primary opacity-50 cursor-default"
+                    className="w-full btn btn-primary bg-green-600 text-white hover:bg-green-700 opacity-50 cursor-default"
                   >
-                    Pagado
+                    Paid
                   </button>
                 )}
                 {invoice.status === 'draft' && (

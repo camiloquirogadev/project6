@@ -76,13 +76,15 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
         <div className={contentClasses.trim()}>
           {/* Header: Logo + toggle */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-            <Link to="/" className="flex items-center">
-              {isOpen ? (
-                <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Zowu</h1>
-              ) : (
-                <span className="text-xl font-bold text-blue-600 dark:text-blue-400">Z</span>
+            <Link to="/" className="flex items-center space-x-2">
+              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
+                {isOpen ? 'Zowu' : 'Z'}
+              </span>
+              {isOpen && (
+               <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Zowu</h1>
               )}
             </Link>
+
             <button
               onClick={toggleSidebar}
               className="p-1 rounded-md text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"

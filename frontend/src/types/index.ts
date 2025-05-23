@@ -9,8 +9,8 @@ export interface User {
 export interface Invoice {
   id: string;
   number: string;
-  date: string;
-  dueDate: string;
+  date: string;       // ISO string o 'YYYY-MM-DD'
+  dueDate: string;    // ISO string o 'YYYY-MM-DD'
   contactId: string;
   items: InvoiceItem[];
   status: 'draft' | 'sent' | 'paid' | 'overdue';

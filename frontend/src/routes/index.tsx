@@ -14,6 +14,7 @@ import NotFound from '../pages/NotFound';
 import TestDbPage from '../pages/TestDbPage';
 import HelpCenter from '../pages/HelpCenter';
 import InvoiceForm from '../pages/InvoiceForm';
+import InvoiceEdit from '../pages/InvoiceEdit';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
@@ -59,6 +60,7 @@ function AppRoutes() {
         <Route path="invoices" element={<Invoices />} />
         <Route path="invoices/new" element={<InvoiceForm />} />
         <Route path="invoices/:id" element={<InvoiceDetail />} />
+        <Route path="/invoices/:id/edit"  element={<InvoiceEdit />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

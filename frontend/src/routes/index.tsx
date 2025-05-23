@@ -15,6 +15,9 @@ import TestDbPage from '../pages/TestDbPage';
 import HelpCenter from '../pages/HelpCenter';
 import InvoiceForm from '../pages/InvoiceForm';
 import InvoiceEdit from '../pages/InvoiceEdit';
+import AdminDashboard from '../pages/AdminDashboard';
+import RoleRoute from '../components/RoleRoute';
+
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
@@ -44,12 +47,22 @@ function AppRoutes() {
           </PrivateRoute>
         }
       >
+{/* <Route path="admin" element={
+  <RoleRoute allowedRoles={['admin']}> <AdminDashboard /> </RoleRoute>
+   }
+/> */}
+<Route path="admin" element={<AdminDashboard />} />
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="/test-db" element={<TestDbPage />} />
         {/* Ruta comodín */}
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="invoices" element={<Invoices />} />
+<Route path="/invoices" element={
+  <RoleRoute allowedRoles={['cliente']}>
+    <Invoices />
+  </RoleRoute>
+} />
+<Route path="invoices" element={<Invoices />} />
         <Route path="invoices/:id" element={<InvoiceDetail />} />
         <Route path="contacts" element={<Contacts />} />
         <Route path="contacts/:id" element={<ContactDetail />} />

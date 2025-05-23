@@ -11,6 +11,9 @@ import Products from '../pages/Products';
 import ProductDetail from '../pages/ProductDetail';
 import Settings from '../pages/Settings';
 import NotFound from '../pages/NotFound';
+import TestDbPage from '../pages/TestDbPage';
+import HelpCenter from '../pages/HelpCenter';
+
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
@@ -42,6 +45,9 @@ function AppRoutes() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
+         <Route path="/test-db" element={<TestDbPage />} />
+      {/* Ruta comodín */}
+      <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="invoices" element={<Invoices />} />
         <Route path="invoices/:id" element={<InvoiceDetail />} />
         <Route path="contacts" element={<Contacts />} />
@@ -49,6 +55,7 @@ function AppRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="settings" element={<Settings />} />
+              <Route path="/help" element={<HelpCenter />} />
       </Route>
       
       <Route path="*" element={<NotFound />} />

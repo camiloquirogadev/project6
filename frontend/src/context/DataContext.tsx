@@ -2,15 +2,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { mockInvoices, mockContacts, mockProducts, mockDashboardMetrics } from '../services/mockData';
 import { Invoice, Contact, Product, DashboardMetric } from '../types';
 
-interface DataContextType {
+export type DataContextType = {
   invoices: Invoice[];
   contacts: Contact[];
   products: Product[];
   dashboardMetrics: DashboardMetric[];
   
   addInvoice: (invoice: Omit<Invoice, 'id'>) => void;
-  updateInvoice: (id: string, invoice: Partial<Invoice>) => void;
-  deleteInvoice: (id: string) => void;
+  updateInvoice: (invoice: Invoice) => void;
+  removeInvoice: (id: string) => void;
   
   addContact: (contact: Omit<Contact, 'id'>) => void;
   updateContact: (id: string, contact: Partial<Contact>) => void;
@@ -21,7 +21,21 @@ interface DataContextType {
   deleteProduct: (id: string) => void;
 }
 
-const DataContext = createContext<DataContextType | undefined>(undefined);
+export const DataContext = createContext<DataContextType>({
+  invoices: [],
+  contacts: [],
+  products: [],
+  dashboardMetrics: [],
+  addInvoice: () => {},
+  updateInvoice: () => {},
+  removeInvoice: () => {},
+  addContact: () => {},
+  updateContact: () => {},
+  deleteContact: () => {},
+  addProduct: () => {},
+  updateProduct: () => {},
+  deleteProduct: () => {},
+});
 
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -66,14 +80,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setInvoices(prev => [...prev, newInvoice]);
   };
   
-  const updateInvoice = (id: string, invoice: Partial<Invoice>) => {
+  const updateInvoice = (invoice: Invoice) => {
     setInvoices(prev => 
-      prev.map(item => item.id === id ? { ...item, ...invoice } : item)
+      prev.map(item => item.id === invoice.id ? { ...item, ...invoice } : item)
     );
   };
   
-  const deleteInvoice = (id: string) => {
-    setInvoices(prev => prev.filter(item => item.id !== id));
+  const removeInvoice = (id: string) => {
+    setInvoices(prev => prev.filter(inv => inv.id !== id));
   };
   
   // Contact CRUD operations
@@ -116,7 +130,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       dashboardMetrics,
       addInvoice,
       updateInvoice,
-      deleteInvoice,
+      removeInvoice,
       addContact,
       updateContact,
       deleteContact,

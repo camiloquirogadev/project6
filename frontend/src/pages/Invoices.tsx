@@ -11,34 +11,34 @@ function Invoices() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const navigate = useNavigate();
-  
+
   // Helper to get contact name by ID
   const getContactName = (contactId: string) => {
     const contact = contacts.find(c => c.id === contactId);
     return contact ? contact.name : 'Unknown';
   };
-  
+
   // Apply filters
   const filteredInvoices = invoices.filter(invoice => {
-    const matchesSearch = 
-      invoice.number.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch =
+      invoice.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
       getContactName(invoice.contactId).toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchesStatus = statusFilter === 'all' || invoice.status === statusFilter;
-    
+
     return matchesSearch && matchesStatus;
   });
-  
+
   // Sort by date (most recent first)
   const sortedInvoices = [...filteredInvoices].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   );
-  
+
   // Table columns
   const columns = [
     {
       header: 'Invoice #',
-      accessor: 'number',
+      accessor: (invoice: typeof invoices[0]) => invoice.number,
       width: '15%',
     },
     {
@@ -67,22 +67,22 @@ function Invoices() {
       width: '15%',
     },
   ];
-  
+
   // Handle row click
   const handleRowClick = (invoice: typeof invoices[0]) => {
     navigate(`/invoices/${invoice.id}`);
   };
-  
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Invoices</h1>
-        <button className="btn btn-primary flex items-center">
-          <Plus size={18} className="mr-1" />
-          New Invoice
+      <button onClick={() => navigate('/invoices/new')} className="btn btn-primary flex items-center">
+        <Plus size={18} className="mr-1" />
+        New Invoice
         </button>
       </div>
-      
+
       <Card>
         {/* Filters and Search */}
         <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
@@ -100,7 +100,7 @@ function Invoices() {
               />
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="flex items-center">
               <Filter size={16} className="text-gray-500 mr-2" />
@@ -116,14 +116,14 @@ function Invoices() {
                 <option value="overdue">Overdue</option>
               </select>
             </div>
-            
+
             <button className="btn btn-secondary flex items-center">
               <Download size={16} className="mr-1" />
               Export
             </button>
           </div>
         </div>
-        
+
         {/* Invoices Table */}
         <DataTable
           data={sortedInvoices}

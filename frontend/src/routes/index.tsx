@@ -13,30 +13,30 @@ import Settings from '../pages/Settings';
 import NotFound from '../pages/NotFound';
 import TestDbPage from '../pages/TestDbPage';
 import HelpCenter from '../pages/HelpCenter';
-
+import InvoiceForm from '../pages/InvoiceForm';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-  
+
   return children;
 }
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
-  
+
   return (
     <Routes>
-      <Route 
-        path="/login" 
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} 
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
       />
-      
-      <Route 
-        path="/" 
+
+      <Route
+        path="/"
         element={
           <PrivateRoute>
             <Layout />
@@ -45,9 +45,9 @@ function AppRoutes() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
-         <Route path="/test-db" element={<TestDbPage />} />
-      {/* Ruta comodín */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/test-db" element={<TestDbPage />} />
+        {/* Ruta comodín */}
+        <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="invoices" element={<Invoices />} />
         <Route path="invoices/:id" element={<InvoiceDetail />} />
         <Route path="contacts" element={<Contacts />} />
@@ -55,9 +55,12 @@ function AppRoutes() {
         <Route path="products" element={<Products />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="settings" element={<Settings />} />
-              <Route path="/help" element={<HelpCenter />} />
+        <Route path="/help" element={<HelpCenter />} />
+        <Route path="invoices" element={<Invoices />} />
+        <Route path="invoices/new" element={<InvoiceForm />} />
+        <Route path="invoices/:id" element={<InvoiceDetail />} />
       </Route>
-      
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

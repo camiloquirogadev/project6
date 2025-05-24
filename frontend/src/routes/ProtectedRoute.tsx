@@ -1,26 +1,32 @@
 // src/components/ProtectedRoute.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import Layout from '../Layout';
-import Login from '../../pages/Login';
-import Dashboard from '../../pages/Dashboard';
-import Invoices from '../../features/invoices/pages/Invoices';
-import InvoiceDetail from '../../features/invoices/pages/InvoiceDetail';
-import Contacts from '../../features/contacts/Contacts';
-import ContactDetail from '../../features/contacts/ContactDetail';
-import Products from '../../features/products/Products';
-import ProductDetail from '../../features/products/ProductDetail';
-import Settings from '../../pages/Settings';
-import NotFound from '../../pages/NotFound';
-import TestDbPage from '../../pages/TestDbPage';
-import HelpCenter from '../../pages/HelpCenter';
-import InvoiceForm from '../../features/invoices/pages/InvoiceForm';
-import InvoiceEdit from '../../features/invoices/pages/InvoiceEdit';
+import { useAuth } from '../context/AuthContext';
+import Layout from '../components/Layout';
+import Login from '../pages/Login';
+import Dashboard from '../pages/Dashboard';
+import Invoices from '../features/invoices/pages/Invoices';
+import InvoiceDetail from '../features/invoices/pages/InvoiceDetail';
+import Contacts from '../features/contacts/Contacts';
+import ContactDetail from '../features/contacts/ContactDetail';
+import Products from '../features/products/Products';
+import ProductDetail from '../features/products/ProductDetail';
+import Settings from '../pages/Settings';
+import NotFound from '../pages/NotFound';
+import TestDbPage from '../pages/TestDbPage';
+import HelpCenter from '../pages/HelpCenter';
+import InvoiceForm from '../features/invoices/pages/InvoiceForm';
+import InvoiceEdit from '../features/invoices/pages/InvoiceEdit';
+import { ReactNode } from 'react';
 
-function PrivateRoute({ children }: { children: JSX.Element }) {
+type ProtectedRouteProps = {
+  children: ReactNode;
+};
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-}
+
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
 
 function RoleRoute({
   children,
@@ -55,9 +61,9 @@ function AppRoutes() {
       <Route
         path="/"
         element={
-          <PrivateRoute>
+          <ProtectedRoute>
             <Layout />
-          </PrivateRoute>
+          </ProtectedRoute>
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />

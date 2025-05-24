@@ -1,28 +1,32 @@
-import { useData } from '../context/DataContext';
+import { useDashboardData } from '@/hooks/useDashboardData';
 import MetricCard from '../components/ui/MetricCard';
 import Card from '../components/ui/Card';
 import StatusBadge from '../components/ui/StatusBadge';
 import { Calendar, Clock, Clipboard, LineChart } from 'lucide-react';
 
 function Dashboard() {
-  const { dashboardMetrics, invoices, contacts } = useData();
-  
+  const { dashboardMetrics, invoices, contacts } = useDashboardData();
+
   // Get recent invoices
   const recentInvoices = [...invoices]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .slice(0, 5);
-  
+
   // Get recent customers
   const recentCustomers = contacts
     .filter((contact) => contact.type === 'customer')
     .slice(0, 5);
-  
+
   // Calculate statistics
   const totalInvoices = invoices.length;
   const paidInvoices = invoices.filter(invoice => invoice.status === 'paid').length;
   const overdueInvoices = invoices.filter(invoice => invoice.status === 'overdue').length;
   const totalCustomers = contacts.filter(contact => contact.type === 'customer').length;
-  
+
+  function normalizeStatus(_status: string): "sent" | "paid" | "draft" | "overdue" | "customer" | "vendor" | "active" | "inactive" {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -31,7 +35,7 @@ function Dashboard() {
           <button className="btn btn-primary">Export Report</button>
         </div>
       </div>
-      
+
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {dashboardMetrics.map((metric) => (
@@ -39,14 +43,14 @@ function Dashboard() {
             key={metric.id}
             title={metric.label}
             value={metric.value}
-            change={metric.change}
-            period={metric.period}
+            change={Number(metric.change) || 0}
+            period={metric.period ?? ''}
             prefix={metric.label.includes('Revenue') ? '$' : ''}
             className="h-full"
           />
         ))}
       </div>
-      
+
       {/* Middle Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Invoices */}
@@ -69,11 +73,12 @@ function Dashboard() {
                   <p className="text-sm font-medium text-gray-800 mr-3">
                     ${invoice.total.toLocaleString()}
                   </p>
-                  <StatusBadge status={invoice.status} />
+                  <StatusBadge status={normalizeStatus(invoice.status)} />
+
                 </div>
               </div>
             ))}
-            
+
             <div className="pt-2">
               <a href="/invoices" className="text-sm font-medium text-blue-600 hover:text-blue-800">
                 View all invoices
@@ -81,7 +86,7 @@ function Dashboard() {
             </div>
           </div>
         </Card>
-        
+
         {/* Recent Customers */}
         <Card title="Recent Customers">
           <div className="space-y-4">
@@ -98,10 +103,10 @@ function Dashboard() {
                     <p className="text-xs text-gray-500">{customer.email}</p>
                   </div>
                 </div>
-                <StatusBadge status={customer.type} />
+                <StatusBadge status={customer.type === 'customer' ? 'active' : 'inactive'} />
               </div>
             ))}
-            
+
             <div className="pt-2">
               <a href="/contacts" className="text-sm font-medium text-blue-600 hover:text-blue-800">
                 View all customers
@@ -110,7 +115,7 @@ function Dashboard() {
           </div>
         </Card>
       </div>
-      
+
       {/* Bottom Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Stats Summary */}
@@ -134,7 +139,7 @@ function Dashboard() {
             </div>
           </div>
         </Card>
-        
+
         {/* Upcoming Tasks */}
         <Card title="Upcoming Tasks" className="col-span-1">
           <div className="space-y-3">
@@ -167,7 +172,7 @@ function Dashboard() {
             </div>
           </div>
         </Card>
-        
+
         {/* Quick Actions */}
         <Card title="Quick Actions" className="col-span-1">
           <div className="space-y-3">

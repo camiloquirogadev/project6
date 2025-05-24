@@ -16,7 +16,6 @@ import NotFound from '../pages/NotFound';
 import TestDbPage from '../pages/TestDbPage';
 import HelpCenter from '../pages/HelpCenter';
 import AdminDashboard from '../pages/AdminDashboard';
-import RoleRoute from '../components/role/RoleRoute';
 import Billing from '../pages/Billing';
 import Reports from '../pages/Reports';
 import Sales from '../pages/Sales';
@@ -25,86 +24,144 @@ import CalendarPage from '../features/contacts/CalendarPage';
 import UsersPage from '../features/users/pages/UsersPage';
 import UserManagement from '../features/users/pages/UserManagement';
 import TasksPage from '../pages/TasksPage';
-
-function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
-}
+import NotificationsPage from '@/pages/Notifications';
+import AccessRoute from '@/components/role/AccessRoute';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />} />
+      <Route
+        path="/login"
+        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
+      />
 
-      <Route path="/" element={
-        <PrivateRoute>
-          <Layout />
-        </PrivateRoute>
-      } >
-        <Route path="/admin-dashboard" element={<RoleRoute allowedRoles={['admin']}><AdminDashboard /></RoleRoute>} />
-
-        <Route path="integrations" element={
-          <RoleRoute allowedRoles={['admin']}>
-            <Integrations />
-          </RoleRoute>
+      <Route
+        path="/"
+        element={
+          <AccessRoute>
+            <Layout />
+          </AccessRoute>
         }
-        />
-        <Route path="users" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
-
-        <Route path="users" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
-        <Route path="users/:id" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
-        <Route path="user-management" element={<RoleRoute allowedRoles={['admin']}><UserManagement /></RoleRoute>} />
-        <Route path="/users/:id" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
-
-        <Route path="/user-management" element={<RoleRoute allowedRoles={['admin']}><UserManagement /></RoleRoute>} />
-
-        <Route path="calendar" element={<CalendarPage />} />
-
+      >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<AccessRoute><Dashboard /></AccessRoute>} />
 
-        <Route path="admin" element={<RoleRoute allowedRoles={['admin']}>
-          <AdminDashboard />
-        </RoleRoute>
+        <Route path="admin-dashboard" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </AccessRoute>
         } />
-        <Route path="/tasks" element={
-          <RoleRoute allowedRoles={['admin']}>
+
+        <Route path="invoices" element={
+          <AccessRoute allowedRoles={['admin', 'cliente']}>
+            <Invoices />
+          </AccessRoute>
+        } />
+        <Route path="invoices/:id" element={
+          <AccessRoute allowedRoles={['admin', 'cliente']}>
+            <InvoiceDetail />
+          </AccessRoute>
+        } />
+        <Route path="invoices/new" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <InvoiceForm />
+          </AccessRoute>
+        } />
+        <Route path="invoices/:id/edit" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <InvoiceEdit />
+          </AccessRoute>
+        } />
+
+        <Route path="contacts" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Contacts />
+          </AccessRoute>
+        } />
+        <Route path="contacts/:id" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <ContactDetail />
+          </AccessRoute>
+        } />
+
+        <Route path="products" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Products />
+          </AccessRoute>
+        } />
+        <Route path="products/:id" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <ProductDetail />
+          </AccessRoute>
+        } />
+
+        <Route path="settings" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Settings />
+          </AccessRoute>
+        } />
+        <Route path="test-db" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <TestDbPage />
+          </AccessRoute>
+        } />
+        <Route path="help" element={
+          <AccessRoute>
+            <HelpCenter />
+          </AccessRoute>
+        } />
+        <Route path="billing" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Billing />
+          </AccessRoute>
+        } />
+        <Route path="reports" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Reports />
+          </AccessRoute>
+        } />
+        <Route path="sales" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Sales />
+          </AccessRoute>
+        } />
+        <Route path="integrations" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <Integrations />
+          </AccessRoute>
+        } />
+        <Route path="calendar" element={<AccessRoute><CalendarPage /></AccessRoute>} />
+        <Route path="users" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <UsersPage />
+          </AccessRoute>
+        } />
+        <Route path="users/:id" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <UsersPage />
+          </AccessRoute>
+        } />
+        <Route path="user-management" element={
+          <AccessRoute allowedRoles={['admin']}>
+            <UserManagement />
+          </AccessRoute>
+        } />
+        <Route path="tasks" element={
+          <AccessRoute allowedRoles={['admin']}>
             <TasksPage />
-          </RoleRoute>
+          </AccessRoute>
         } />
-
-
-        <Route path="sales" element={<Sales />} />
-        <Route
-          path="/reports"
-          element={
-            <RoleRoute allowedRoles={['admin']}>
-              <Reports />
-            </RoleRoute>
-          }
-        />
-        <Route path="admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/billing" element={<Billing />} />
-        <Route path="invoices" element={<Invoices />} />
-        <Route path="invoices/new" element={<InvoiceForm />} />
-        <Route path="invoices/:id" element={<InvoiceDetail />} />
-        <Route path="invoices/:id/edit" element={<InvoiceEdit />} />
-        <Route path="invoices/:id/preview" element={<InvoiceDetail />} />
-        <Route path="contacts" element={<Contacts />} />
-        <Route path="contacts/:id" element={<ContactDetail />} />
-
-        <Route path="products" element={<Products />} />
-        <Route path="products/:id" element={<ProductDetail />} />
-
-        <Route path="settings" element={<Settings />} />
-        <Route path="help" element={<HelpCenter />} />
-        <Route path="test-db" element={<TestDbPage />} />
-
+        <Route path="notifications" element={
+          <AccessRoute>
+            <NotificationsPage />
+          </AccessRoute>
+        } />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
 
+      <Route path="/unauthorized" element={<h1 className="p-8 text-xl text-red-600">Acceso no autorizado</h1>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

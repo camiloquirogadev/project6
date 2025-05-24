@@ -55,7 +55,6 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
         { path: '/reports', label: 'Informes', icon: <BarChart2 size={20} />, roles: ['admin'] },
         { path: '/calendar', label: 'Calendario', icon: <Calendar size={20} />, roles: ['admin'] },
         { path: '/tasks', label: 'Tareas', icon: <ListChecks size={20} />, roles: ['admin'] }
-
       ]
     },
     {
@@ -87,7 +86,7 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
   ];
 
   const sidebarClasses = `
-    bg-white dark:bg-gray-800
+    bg-white dark:bg-gray-800 text-gray-900 dark:text-white
     h-screen border-r border-gray-200 dark:border-gray-700
     transition-all duration-300
     ${isOpen ? 'w-64' : 'w-0 sm:w-16'}
@@ -96,7 +95,7 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
   `;
 
   const contentClasses = `
-    flex flex-col h-full overflow-y-auto
+    flex flex-col h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800
     ${isOpen ? 'opacity-100' : 'opacity-0 sm:opacity-100'}
   `;
 
@@ -115,9 +114,6 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
               <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                 {isOpen ? 'Zowu' : 'Z'}
               </span>
-              {isOpen && (
-                <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Zowu</h1>
-              )}
             </Link>
             <button
               onClick={toggleSidebar}
@@ -131,7 +127,7 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
           <nav className="flex-1 px-2 py-4 space-y-6">
             {navGroups.map(group => (
               <div key={group.title}>
-                {isOpen && <p className="text-xs text-gray-500 uppercase tracking-wide px-2 mb-1">{group.title}</p>}
+                {isOpen && <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide px-2 mb-1">{group.title}</p>}
                 {group.items
                   .filter(item => item.roles.includes(user?.role ?? ''))
                   .map(item => {
@@ -140,12 +136,11 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
                       <Link
                         key={item.path}
                         to={item.path}
-                        className={
-                          `flex items-center px-2 py-2 text-sm font-medium rounded-md ` +
-                          (active
-                            ? 'bg-blue-50 dark:bg-blue-900 text-blue-600 dark:text-blue-300'
-                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white')
-                        }
+                        className={`flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                          active
+                            ? 'bg-blue-100 dark:bg-gray-700 text-blue-600 dark:text-white'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                        }`}
                       >
                         <span className="mr-3">{item.icon}</span>
                         {isOpen && <span>{item.label}</span>}
@@ -161,20 +156,20 @@ export default function Sidebar({ isOpen, isMobile, toggleSidebar }: SidebarProp
               <div className="bg-gray-50 dark:bg-gray-900 p-3 rounded-md">
                 <div className="flex items-center mb-2">
                   <HelpCircle size={20} className="text-blue-600 dark:text-blue-400 mr-2" />
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100">Need help?</h3>
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">Need help?</h3>
                 </div>
                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                   Check our help center or contact support.
                 </p>
                 <Link
                   to="/help"
-                  className="mt-2 block w-full px-3 py-1.5 text-xs font-medium text-blue-600 bg-white dark:bg-gray-800 border border-blue-300 dark:border-gray-600 rounded-md hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200 text-center"
+                  className="mt-2 block w-full px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-white bg-white dark:bg-gray-800 border border-blue-300 dark:border-gray-600 rounded-md hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200 text-center"
                 >
                   Help Center
                 </Link>
                 <button
                   onClick={toggleDarkMode}
-                  className="mt-2 w-full px-3 py-1.5 text-xs font-medium text-blue-600 bg-white dark:bg-gray-800 border border-blue-300 dark:border-gray-600 rounded-md hover:bg-blue-50 dark:hover:bg-gray-700 flex items-center justify-center gap-2 ring-1 ring-gray-700"
+                  className="mt-2 w-full px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-white bg-white dark:bg-gray-800 border border-blue-300 dark:border-gray-600 rounded-md hover:bg-blue-50 dark:hover:bg-gray-700 flex items-center justify-center gap-2 ring-1 ring-gray-700"
                 >
                   {isDark ? <Sun size={16} /> : <Moon size={16} />}
                   <span>{isDark ? 'Modo claro' : 'Modo oscuro'}</span>

@@ -1,10 +1,11 @@
 // backend/models/Role.js
-{
-  id: string;
-  name: string; // Ej: "Manager", "Editor"
-  permissions: string[]; // Ej: ['invoice:read', 'invoice:create']
-  clientId: string; // para multicliente
-}
+// Example Role object structure:
+// {
+//   id: string,
+//   name: string, // Ej: "Manager", "Editor"
+//   permissions: string[], // Ej: ['invoice:read', 'invoice:create']
+//   clientId: string // para multicliente
+// }
 
 // src/models/Role.js
 const mongoose = require('mongoose');

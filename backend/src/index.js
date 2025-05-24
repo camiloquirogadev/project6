@@ -1,4 +1,5 @@
 // src/index.js
+app.use('/api/roles', require('./routes/roleRoutes'));
 
 // 1️⃣ Carga de variables de entorno
 import dotenv from 'dotenv';

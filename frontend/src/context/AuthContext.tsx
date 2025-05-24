@@ -14,9 +14,10 @@ interface User {
   email: string;
   avatar: string;
   role: 'admin' | 'cliente';
+  permissions: string[];
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -56,7 +57,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         email,
         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=random`,
         role,
+        permissions: role === 'admin'
+          ? ['user:create', 'user:read', 'user:update', 'user:delete']
+          : ['user:read'],
       };
+
 
       localStorage.setItem('user', JSON.stringify(mockUser));
       setUser(mockUser);

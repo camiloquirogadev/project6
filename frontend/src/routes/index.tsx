@@ -26,8 +26,6 @@ import UsersPage from '../features/users/pages/UsersPage';
 import UserManagement from '../features/users/pages/UserManagement';
 import TasksPage from '../pages/TasksPage';
 
-
-
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -53,8 +51,11 @@ function AppRoutes() {
           </RoleRoute>
         }
         />
+        <Route path="users" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
 
-        <Route path="/users" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
+        <Route path="users" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
+        <Route path="users/:id" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
+        <Route path="user-management" element={<RoleRoute allowedRoles={['admin']}><UserManagement /></RoleRoute>} />
         <Route path="/users/:id" element={<RoleRoute allowedRoles={['admin']}><UsersPage /></RoleRoute>} />
 
         <Route path="/user-management" element={<RoleRoute allowedRoles={['admin']}><UserManagement /></RoleRoute>} />

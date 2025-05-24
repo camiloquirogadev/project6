@@ -1,22 +1,19 @@
-// features/users/pages/UsersPage.tsx
-import { useEffect, useState } from 'react';
-import { getUsers } from '../services/userService';
+// src/features/users/pages/UsersPage.tsx
+import { usePermissions } from '@/hooks/usePermissions';
+import { Button } from '@/components/ui/Button';
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<any[]>([]);
-
-  useEffect(() => {
-    getUsers().then(setUsers);
-  }, []);
+  const { can } = usePermissions();
 
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Usuarios</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.name} - {user.email}</li>
-        ))}
-      </ul>
+      {can('user:create') && (
+        <Button onClick={() => alert('Crear usuario')}>Crear Usuario</Button>
+      )}
+      {!can('user:create') && (
+        <p className="text-gray-500">No tenés permiso para crear usuarios.</p>
+      )}
     </div>
   );
 }

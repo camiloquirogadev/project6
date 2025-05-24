@@ -1,8 +1,8 @@
 // frontend/src/pages/InvoiceForm.tsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useData } from '../context/DataContext';
-import Card from '../components/ui/Card';
+import { useData } from '../../../context/DataContext';
+import Card from '../../../components/ui/Card';
 import { Plus, Trash2 } from 'lucide-react';
 
 export default function InvoiceForm() {

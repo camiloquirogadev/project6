@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext';
-import { Search, Bell, Menu, X, User, LogOut, Settings } from 'lucide-react';
+import { useAuth } from '../../../context/AuthContext';
+import { Search, Bell, Menu, User, LogOut, Settings } from 'lucide-react';
 
 interface NavbarProps {
   toggleSidebar: () => void;

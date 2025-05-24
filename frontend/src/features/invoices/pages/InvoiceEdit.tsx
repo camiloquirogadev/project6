@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useData } from '../context/DataContext';
+import { useData } from '../../../context/DataContext';
 // Update the import path below to the correct location of Button and Input components.
 // For example, if they are in 'components/ui/Button' and 'components/ui/Input', import them like this:
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
+import { Button } from '../../../components/ui/Button';
+import { Input } from '../../../components/ui/Input';
 
 interface InvoiceForm {
   date: string;

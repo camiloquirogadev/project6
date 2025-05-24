@@ -1,5 +1,5 @@
 // frontend/src/utils/overdueLogic.ts
-import { Invoice } from '../types';
+import { Invoice } from '../../../types/index';
 
 /**
  * Comprueba si una factura está vencida y, si procede,

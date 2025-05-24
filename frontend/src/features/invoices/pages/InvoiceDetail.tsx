@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useData } from '../context/DataContext';
-import Card from '../components/ui/Card';
-import StatusBadge from '../components/ui/StatusBadge';
+import { useData } from '../../../context/DataContext';
+import Card from '../../../components/ui/Card';
+import StatusBadge from '../../../components/ui/StatusBadge';
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -44,7 +44,11 @@ export default function InvoiceDetail() {
     // Aplica lógica de vencimiento
     inv = checkAndMarkOverdue(inv, updateInvoice);
     setInvoice(inv);
-    setContact(contacts.find(c => c.id === inv.contactId) || null);
+    if (inv) {
+      setContact(contacts.find(c => c.id === inv.contactId) || null);
+    } else {
+      setContact(null);
+    }
   }, [id, invoices, contacts, navigate, updateInvoice]);
   if (!invoice || !contact) {
     return (

@@ -25,19 +25,21 @@ export interface InvoiceItem {
   price: number;
   subtotal: number;
 }
+export interface Sale {
+  id: string;
+  date: string;
+  customer: string;
+  amount: number;
+  status?: 'pending' | 'completed' | 'cancelled';
+}
 
-export interface Contact {
+export type Contact = {
   id: string;
   name: string;
   email: string;
-  phone: string;
-  type: 'customer' | 'vendor';
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  notes?: string;
-}
+  role?: string; // <-- Agrega esta línea
+  // ...otros campos si es necesario
+};
 
 export interface Product {
   id: string;

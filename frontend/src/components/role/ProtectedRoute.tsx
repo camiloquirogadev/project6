@@ -1,21 +1,21 @@
 // src/components/ProtectedRoute.tsx
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import Layout from '../components/Layout';
-import Login from '../pages/Login';
-import Dashboard from '../pages/Dashboard';
-import Invoices from '../pages/Invoices';
-import InvoiceDetail from '../pages/InvoiceDetail';
-import Contacts from '../pages/Contacts';
-import ContactDetail from '../pages/ContactDetail';
-import Products from '../pages/Products';
-import ProductDetail from '../pages/ProductDetail';
-import Settings from '../pages/Settings';
-import NotFound from '../pages/NotFound';
-import TestDbPage from '../pages/TestDbPage';
-import HelpCenter from '../pages/HelpCenter';
-import InvoiceForm from '../pages/InvoiceForm';
-import InvoiceEdit from '../pages/InvoiceEdit';
+import { useAuth } from '../../context/AuthContext';
+import Layout from '../Layout';
+import Login from '../../pages/Login';
+import Dashboard from '../../pages/Dashboard';
+import Invoices from '../../features/invoices/pages/Invoices';
+import InvoiceDetail from '../../features/invoices/pages/InvoiceDetail';
+import Contacts from '../../pages/Contacts';
+import ContactDetail from '../../pages/ContactDetail';
+import Products from '../../pages/Products';
+import ProductDetail from '../../pages/ProductDetail';
+import Settings from '../../pages/Settings';
+import NotFound from '../../pages/NotFound';
+import TestDbPage from '../../pages/TestDbPage';
+import HelpCenter from '../../pages/HelpCenter';
+import InvoiceForm from '../../features/invoices/pages/InvoiceForm';
+import InvoiceEdit from '../../features/invoices/pages/InvoiceEdit';
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
   const { isAuthenticated } = useAuth();

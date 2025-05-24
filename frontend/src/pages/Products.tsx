@@ -87,46 +87,46 @@ function Products() {
         {/* Filters and Search */}
         <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
           <div className="flex items-center">
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search size={16} className="text-gray-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-60"
-              />
-            </div>
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search size={16} className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-60"
+          />
+        </div>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-2">
-            <div className="flex items-center">
-              <Filter size={16} className="text-gray-500 mr-2" />
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              >
-                <option value="all">All Categories</option>
-                {categories.map(category => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-            </div>
-            
-            <button className="btn btn-secondary flex items-center">
-              <Download size={16} className="mr-1" />
-              Export
-            </button>
+        <div className="flex items-center">
+          <Filter size={16} className="text-gray-500 mr-2" />
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          >
+            <option value="all">All Categories</option>
+            {categories.map(category => (
+          <option key={category} value={category}>{category}</option>
+            ))}
+          </select>
+        </div>
+        
+        <button className="btn btn-secondary flex items-center">
+          <Download size={16} className="mr-1" />
+          Export
+        </button>
           </div>
         </div>
         
         {/* Products Table */}
         <DataTable
           data={sortedProducts}
-          columns={columns}
+          columns={columns as any}
           keyField="id"
           onRowClick={handleRowClick}
           emptyMessage="No products found. Add your first product!"

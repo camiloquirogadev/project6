@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Card from '../components/ui/Card';
 import { useAuth } from '../context/AuthContext';
 import { Save, User,Trash2, Building, CreditCard, Bell, Shield, HelpCircle } from 'lucide-react';
-import { AddPaymentModal } from '../components/modals/AddPaymentModal';
+import AddPaymentModal from '../components/modals/AddPaymentModal';
 
 function Settings() {
   const { user } = useAuth();

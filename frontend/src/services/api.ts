@@ -9,3 +9,20 @@ export async function testDB(): Promise<{ success: boolean; database: string }> 
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
 }
+import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Interceptor para token (si usás autenticación)
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});

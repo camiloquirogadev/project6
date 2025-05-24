@@ -7,10 +7,10 @@ import Invoices from '../features/invoices/pages/Invoices';
 import InvoiceDetail from '../features/invoices/pages/InvoiceDetail';
 import InvoiceForm from '../features/invoices/pages/InvoiceForm';
 import InvoiceEdit from '../features/invoices/pages/InvoiceEdit';
-import Contacts from '../pages/Contacts';
-import ContactDetail from '../pages/ContactDetail';
-import Products from '../pages/Products';
-import ProductDetail from '../pages/ProductDetail';
+import Contacts from '../features/contacts/Contacts';
+import ContactDetail from '../features/contacts/ContactDetail';
+import Products from '../features/products/Products';
+import ProductDetail from '../features/products/ProductDetail';
 import Settings from '../pages/Settings';
 import NotFound from '../pages/NotFound';
 import TestDbPage from '../pages/TestDbPage';
@@ -21,9 +21,9 @@ import Billing from '../pages/Billing';
 import Reports from '../pages/Reports';
 import Sales from '../pages/Sales';
 import Integrations from '../pages/Integrations';
-import CalendarPage from '../pages/CalendarPage';
-import UsersPage from '../pages/UsersPage';
-import UserManagement from '../pages/UserManagement';
+import CalendarPage from '../features/contacts/CalendarPage';
+import UsersPage from '../features/users/pages/UsersPage';
+import UserManagement from '../features/users/pages/UserManagement';
 import TasksPage from '../pages/TasksPage';
 
 

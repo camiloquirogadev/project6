@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useData } from '../context/DataContext';
-import Card from '../components/ui/Card';
+import { useData } from '../../context/DataContext';
+import Card from '../../components/ui/Card';
 import { 
   ChevronLeft, 
   Edit, 

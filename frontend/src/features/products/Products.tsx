@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useData } from '../context/DataContext';
-import DataTable from '../components/ui/DataTable';
-import Card from '../components/ui/Card';
+import { useData } from '../../context/DataContext';
+import DataTable from '../../components/ui/DataTable';
+import Card from '../../components/ui/Card';
 import { Plus, Filter, Download, Search } from 'lucide-react';
 
 function Products() {
